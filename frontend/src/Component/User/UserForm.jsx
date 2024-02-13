@@ -1,5 +1,6 @@
-import React from 'react';
+import {React,UseState} from 'react';
 import "./home.css";
+// import PdfViewer from '../PdfViewer';
 import { PlusOutlined, SendOutlined  } from '@ant-design/icons';
 import {
   Button,
@@ -18,9 +19,18 @@ const normFile = (e) => {
   return e?.fileList;
 };
 export default function UserForm ()  {
+
+  const[form] = Form.useForm();
+
+  const handleSend  = ()=>{
+    alert("File has been send");
+    form.resetFields();
+  } 
+
   return (
     <div className='user-form'>
       <Form
+        form = {form}
         labelCol={{
           span: 4,
         }}
@@ -29,7 +39,7 @@ export default function UserForm ()  {
         }}
         layout="horizontal"
         style={{
-          maxWidth: 600,
+          maxWidth: 1200,
         }}
       >
         <Form.Item label="Doc Code">
@@ -87,11 +97,12 @@ export default function UserForm ()  {
               </div>
             </button>
           </Upload>
+          {/* <PdfViewer/> */}
         </Form.Item>
         <Form.Item  >
           <Flex wrap="wrap" gap="small">
             
-            <Button type="primary" icon={<SendOutlined />}>
+            <Button type="primary" icon={<SendOutlined />} onClick={handleSend}>
               Send
             </Button>
             

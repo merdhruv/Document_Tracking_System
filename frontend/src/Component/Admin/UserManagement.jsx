@@ -57,7 +57,7 @@ export default function UserManagement() {
   const items = [
     {
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+        <a target="_blank" rel="noopener noreferrer" href="">
           <FontAwesomeIcon icon={faUser} />
           View Profile
         </a>
@@ -66,7 +66,7 @@ export default function UserManagement() {
     },
     {
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+        <a target="_blank" rel="noopener noreferrer" href="">
           
           <FontAwesomeIcon icon={faUserLock} />
           Change password
@@ -79,7 +79,7 @@ export default function UserManagement() {
     // },
     {
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+        <a target="_blank" rel="noopener noreferrer" href="">
           <FontAwesomeIcon icon={faUserXmark} />
           Deactivate
         </a>
@@ -89,7 +89,7 @@ export default function UserManagement() {
     },
     {
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+        <a target="_blank" rel="noopener noreferrer" href="">
           <FontAwesomeIcon icon={faUserPen} />
           Update
         </a>

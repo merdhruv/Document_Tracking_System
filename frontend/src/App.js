@@ -9,12 +9,16 @@ import UserManagement from './Component/Admin/UserManagement';
 import Outgoing from './Component/User/Outgoing';
 import UserForm from './Component/User/UserForm';
 import Login from './Component/Login';
+import Register from './Component/Register';
+import PdfViewer from './Component/PdfViewer';
 
 function App() {
   return (
       <BrowserRouter>
         <div className="App">
           <Routes>
+            <Route path='register'element={<Register/>} />
+            <Route path='pdf' element = {<PdfViewer/>} />
             <Route path="/" element={<Login/>}/>
             <Route path="user" element={
               <>

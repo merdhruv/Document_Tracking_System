@@ -7,6 +7,17 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+.cancel-button{
+  position: relative;
+  left: 20px; 
+  padding: 6px 12px;
+  border: 2px solid black;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.modal-row{
+  padding: 20px;
+}
 
 a {
   text-decoration: none;
@@ -19,9 +30,11 @@ a {
   z-index: 1000;
   padding: 10px 20px;
   z-index: 1000;
-  background-color: #ffffff;
+  color: white;
+  background-color: black;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 .details_container {
   max-width: 800px;
@@ -32,7 +45,6 @@ a {
   border-radius: 10px;
   text-align: center;
   position: relative;
-  z-index: 1;
 }
 
 .responsive_cards {
@@ -79,7 +91,7 @@ a {
 .nav_logo,
 .nav_link,
 .button {
-  color: black;
+  color: white;
 }
 
 .nav_logo {
@@ -92,7 +104,7 @@ a {
 }
 
 .nav_link:hover {
-  color: black;
+  color: white;
 }
 
 .button {
@@ -360,6 +372,8 @@ body {
 }
 
 .sitemap-txt-heading {
+  display: flex;
+  flex-direction: column;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -413,9 +427,8 @@ body {
   background-color: #555;
 }
 
-.footer-social .social-icon {
-  width: 30px;
-  height: 30px;
+.footer-social  {
+ display: inline;
   margin-right: 10px;
 }
 
@@ -480,10 +493,7 @@ body {
   /* Add transition for smooth color change */
 }
 
-.nav_link:hover {
-  color: #000000;
-  /* Change color on hover */
-}
+
 
 .button {
   padding: 10px 20px;
@@ -510,7 +520,8 @@ body {
   width: 100%;
   z-index: 1000;
   /* Ensure header is above other elements */
-  background-color: #ffffff;
+  background-color: black;
+  color: white;
   /* Adjust background color as needed */
   padding: 10px 20px;
   /* Adjust padding as needed */
@@ -541,7 +552,7 @@ body {
 
 .nav_link {
   text-decoration: none;
-  color: #333333;
+  color: white;
   /* Adjust color as needed */
   padding: 10px;
   transition: color 0.3s ease;

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./index.css"; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRectangleXmark} from '@fortawesome/free-solid-svg-icons';
+import { faXmark} from '@fortawesome/free-solid-svg-icons';
 import Modal from "react-modal";
+import { Link, useNavigate } from "react-router-dom";
 
 const customStyles = {
   content: {
@@ -12,6 +13,7 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
+
   },
 };
 
@@ -25,6 +27,12 @@ const App = () => {
   //   setShowForm(!showForm);
   // };
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const handleLogin = ()=>{
+    navigate("/user");
+  }
 
   return (
     <>
@@ -62,37 +70,44 @@ const App = () => {
         onRequestClose={() => setModalIsOpen(false)}
         style={customStyles}
       >
-        <button  className="button" id="form-open" onClick={() => setModalIsOpen(false)}>
-        <FontAwesomeIcon icon={faRectangleXmark} />
-        </button>
-        <h2>Login</h2>
-        <div> 
-
-        <form className="form login_form">
-          <div>
-
-            Username
-            <input
-              type="email"
-              // value={email}
-              // onChange={(e) => setEmail(e.target.value)}
-              />
+        <div className="container modal-container">
+          <div className="row modal-row">
+            <div className="offset-4 col-3">
+              <h2>Login</h2>
+            </div>
+            <div className="offset-2 col-3">
+              <button className= "cancel-button" id="form-open" onClick={() => setModalIsOpen(false)}>
+                <FontAwesomeIcon icon={faXmark} />
+               </button>
+            </div>
+          </div>
         
-          </div>
-          <div>
+            <form className="form login_form">
+              <div className="row modal-row"> 
+                Username
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  />
+              </div>
+              <div className="row modal-row">
 
-          
-            Password:
-            <input
-              type="password"
-              // value={password}
-              // onChange={(e) => setPassword(e.target.value)}
-              />
-          
+                Password:
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  />
+              </div>
+              <div className="row modal-row">
+                <button button type="submit" onClick={handleLogin}>Login</button>
+              </div>
+              <div className="row modal-row">
+                New User? <Link to = "/register" style={{"width":"20%"}}>Register</Link>
+              </div>
+            </form>
           </div>
-          <button type="submit">Login</button>
-        </form>
-        </div>
       </Modal>
 
       {/* Home section */}
@@ -210,102 +225,7 @@ const App = () => {
           <div class="container-custom">
             <div class="footer-content-wrap">
               <div class="footer-left-block">
-                <div class="sitema-cols">
-                  <div
-                    id="w-node-a2c4573c-6bf0-d5dc-5a6a-14744d65b766-f94ff522"
-                    class="sitemap-block"
-                    >
-                    <div class="sitemap-txt-heading">Business Solutions</div>
-                    <div class="link-wrapper">
-                      <a
-                        href="/business-solutions/platform"
-                        class="sitemap-txt"
-                        >
-                        Platform
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                    <div class="link-wrapper">
-                      <a
-                        href="/business-solutions/services"
-                        class="sitemap-txt"
-                        >
-                        Services
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                  </div>
-                  <div
-                    id="w-node-f1afe11b-c692-51e1-9f70-427d0760c303-f94ff522"
-                    class="sitemap-block"
-                  >
-                    <div class="sitemap-txt-heading">Science</div>
-                    <div class="link-wrapper">
-                      <a href="/science/our-approach" class="sitemap-txt">
-                        Our approach
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                    <div class="link-wrapper">
-                      <a href="/science/data-science" class="sitemap-txt">
-                        Data science
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                  </div>
-                  <div
-                    id="w-node-_44e9c862-1861-6abf-d07c-874d78d5367b-f94ff522"
-                    class="sitemap-block"
-                  >
-                    <div class="sitemap-txt-heading">Resources</div>
-                    <div class="link-wrapper">
-                      <a href="/resources/blog" class="sitemap-txt">
-                        Blog
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                    <div class="link-wrapper">
-                      <a href="/resources/whs-regulations" class="sitemap-txt">
-                        WHS regulations
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                    <div class="link-wrapper">
-                      <a href="/resources/faqs" class="sitemap-txt">
-                        FAQs
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                  </div>
-                  <div
-                    id="w-node-_345ee3e1-e4db-9961-0d2b-28baa14be699-f94ff522"
-                    class="sitemap-block"
-                    >
-                    <div class="sitemap-txt-heading">Company</div>
-                    <div class="link-wrapper">
-                      <a href="/about" class="sitemap-txt">
-                        About
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                    <div class="link-wrapper">
-                      <a href="/pricing" class="sitemap-txt">
-                        Pricing
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                    <div class="link-wrapper">
-                      <a
-                        href="/contact"
-                        aria-current="page"
-                        class="sitemap-txt w--current"
-                      >
-                        Contact
-                      </a>
-                      <div class="underline-hover hide-tablet-down"></div>
-                    </div>
-                  </div>
-                </div>
+                  
                 <div class="footer-acknowledgement">
                   <img
                     src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423aa8c94136e5f1a736a1f_logo-colour.svg"
@@ -326,50 +246,7 @@ const App = () => {
               </div>
               <div class="footer-right-block">
                 <div class="footer-newsletter">
-                  <h4 class="h4">
-                    <span class="text-span-2">Join our newsletter </span>to stay
-                    up to date
-                  </h4>
-                  <div class="footer-form w-form">
-                    <form
-                      id="email-form"
-                      name="email-form"
-                      data-name="Email Form"
-                      action="https://incheq.us13.list-manage.com/subscribe/post?u=bfab47d28bf59ca4e7f1485a6&amp;amp;id=eb64972505&amp;amp;f_id=002297e2f0"
-                      method="post"
-                      class="form-input"
-                      data-wf-page-id="644778a14084c932eebff15b"
-                      data-wf-element-id="db47293f-5e27-36f3-7436-b85697a8b0b1"
-                      >
-                      <input
-                        class="form-field w-input"
-                        maxlength="256"
-                        name="EMAIL"
-                        data-name="EMAIL"
-                        placeholder="Enter your email"
-                        type="email"
-                        id="EMAIL-2"
-                        required=""
-                        />
-                      <input
-                        type="submit"
-                        data-wait="Please wait..."
-                        class="button w-button"
-                        value="Subscribe"
-                        />
-                    </form>
-                    <div class="form-success-message w-form-done">
-                      <div class="body-small align-left">
-                        Thank you! You are now subscribed to our newsletter.
-                      </div>
-                    </div>
-                    <div class="body-small w-form-fail">
-                      <div>
-                        Oops! Something went wrong while submitting the form.
-                        Please try again.
-                      </div>
-                    </div>
-                  </div>
+      
                 </div>
                 <div class="footer-social">
                   <div class="footer-icons-wrap">

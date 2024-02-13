@@ -44,6 +44,9 @@ const navigate = useNavigate();
 const handleCompose = ()=>{
   navigate('/user/compose');
 }
+const handleView = ()=>{
+  navigate('/pdf');
+}
   return (
     <div>
         <div className="black-box">
@@ -100,7 +103,7 @@ const handleCompose = ()=>{
               <td>{doc.details}</td>
               <td>{doc.dateOfLetter}</td>
               <td>{doc.status}</td>
-              <td> <Button type="primary" icon={<SearchOutlined />}>
+              <td> <Button type="primary" icon={<SearchOutlined />} onClick={handleView}>
                  view
                 </Button>
               </td>
