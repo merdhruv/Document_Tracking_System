@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css"; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark} from '@fortawesome/free-solid-svg-icons';
 import Modal from "react-modal";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const customStyles = {
   content: {
@@ -27,12 +28,30 @@ const App = () => {
   //   setShowForm(!showForm);
   // };
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [islogged, setIslogged] = useState(false);
+
+  useEffect(()=>{
+    if(islogged === true){
+      navigate('/user')
+    }
+  },[islogged])
+
   const navigate = useNavigate();
+
   const handleLogin = ()=>{
-    navigate("/user");
-  }
+    axios.post("http://localhost:5000/api/admin/userlogin", {username,password})
+    .then(result=>{
+      if(result.data.message === 'Success'){
+        setIslogged(true);
+      }
+    }).catch((err)=>{
+      console.log(err);
+    })
+
+  };
+  
 
   return (
     <>
@@ -82,13 +101,13 @@ const App = () => {
             </div>
           </div>
         
-            <form className="form login_form">
+            <form className="form login_form" >
               <div className="row modal-row"> 
-                Username
+                Email
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   />
               </div>
               <div className="row modal-row">
@@ -101,7 +120,7 @@ const App = () => {
                   />
               </div>
               <div className="row modal-row">
-                <button button type="submit" onClick={handleLogin}>Login</button>
+                <button type="submit" onClick={()=>{handleLogin()}}>Login</button>
               </div>
               <div className="row modal-row">
                 New User? <Link to = "/register" style={{"width":"20%"}}>Register</Link>
@@ -221,20 +240,20 @@ const App = () => {
       {/* Footer */}
       <div className="footer">
         {/* Footer content */}
-        <div class="footer">
-          <div class="container-custom">
-            <div class="footer-content-wrap">
-              <div class="footer-left-block">
+        <div className="footer">
+          <div className="container-custom">
+            <div className="footer-content-wrap">
+              <div className="footer-left-block">
                   
-                <div class="footer-acknowledgement">
+                <div className="footer-acknowledgement">
                   <img
                     src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423aa8c94136e5f1a736a1f_logo-colour.svg"
                     loading="lazy"
                     alt="InCheq logo"
                     height="20"
-                    class="footer-logo"
+                    className="footer-logo"
                     />
-                  <div class="body-small">
+                  <div className="body-small">
                     We acknowledge the Traditional Owners of the land where we
                     work and live, the Gadigal people of the Eora Nation and pay
                     our respects to Elders past, present, and emerging. We
@@ -244,101 +263,101 @@ const App = () => {
                   </div>
                 </div>
               </div>
-              <div class="footer-right-block">
-                <div class="footer-newsletter">
+              <div className="footer-right-block">
+                <div className="footer-newsletter">
       
                 </div>
-                <div class="footer-social">
-                  <div class="footer-icons-wrap">
+                <div className="footer-social">
+                  <div className="footer-icons-wrap">
                     <a
                       href="https://www.facebook.com/incheq.co"
                       target="_blank"
-                      class="social-icon-block w-inline-block"
+                      className="social-icon-block w-inline-block"
                       >
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac703f4433e644d297d_icon-social-facebook.svg"
                         loading="lazy"
                         alt="facebook icon"
-                        class="social-icon"
+                        className="social-icon"
                       />
-                      <div class="bg-btn-animate is-social"></div>
+                      <div className="bg-btn-animate is-social"></div>
                     </a>
                     <a
                       href="https://twitter.com/incheq_aus"
                       target="_blank"
-                      class="social-icon-block w-inline-block"
+                      className="social-icon-block w-inline-block"
                       >
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac73d90a44d405c1067_icon-social-twitter.svg"
                         loading="lazy"
                         alt="twitter icon"
-                        class="social-icon"
+                        className="social-icon"
                         />
-                      <div class="bg-btn-animate is-social"></div>
+                      <div className="bg-btn-animate is-social"></div>
                     </a>
                     <a
                       href="https://www.instagram.com/incheq.co/"
                       target="_blank"
-                      class="social-icon-block w-inline-block"
+                      className="social-icon-block w-inline-block"
                     >
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac78d8367ec0922c640_icon-social-instagram.svg"
                         loading="lazy"
                         alt="t"
-                        class="social-icon"
+                        className="social-icon"
                       />
-                      <div class="bg-btn-animate is-social"></div>
+                      <div className="bg-btn-animate is-social"></div>
                     </a>
                     <a
                       href="https://www.linkedin.com/company/incheq-co/"
                       target="_blank"
-                      class="social-icon-block w-inline-block"
+                      className="social-icon-block w-inline-block"
                       >
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac7889b6aa4dfc8bf31_icon-social-linkedin.svg"
                         loading="lazy"
                         alt="linkedin icon"
-                        class="social-icon"
+                        className="social-icon"
                         />
-                      <div class="bg-btn-animate is-social"></div>
+                      <div className="bg-btn-animate is-social"></div>
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="footer-copyright">
-              <div class="copyright-left">
-                <div class="link-wrapper">
+            <div className="footer-copyright">
+              <div className="copyright-left">
+                <div className="link-wrapper">
                   <a
                     href="/terms-conditions"
                     target="_blank"
-                    class="body-small"
+                    className="body-small"
                   >
                     Terms and Conditions
                   </a>
-                  <div class="underline-hover hide-tablet-down"></div>
+                  <div className="underline-hover hide-tablet-down"></div>
                 </div>
-                <div class="link-wrapper">
-                  <a href="/privacy-policy" target="_blank" class="body-small">
+                <div className="link-wrapper">
+                  <a href="/privacy-policy" target="_blank" className="body-small">
                     Privacy Policy
                   </a>
-                  <div class="underline-hover hide-tablet-down"></div>
+                  <div className="underline-hover hide-tablet-down"></div>
                 </div>
               </div>
-              <div class="copyright-right">
-                <div class="body-xs">
+              <div className="copyright-right">
+                <div className="body-xs">
                   © 2023 InCheq. All Rights Reserved
                   <a
                     href="https://www.monotonomo.com/"
                     target="_blank"
-                    class="by-link"
+                    className="by-link"
                     ></a>
                 </div>
-                <div class="body-xs">
+                <div className="body-xs">
                   <a
                     href="https://www.monotonomo.com/"
                     target="_blank"
-                    class="by-link"
+                    className="by-link"
                   >
                     Website by Monotonomo
                   </a>
@@ -347,14 +366,14 @@ const App = () => {
             </div>
           </div>
         </div>
-        <div class="cursor">
+        <div className="cursor">
           <div
             data-w-id="9f54bfc6-d3fa-a651-f09d-f4c94a566b55"
-            class="cursor-dot"
+            className="cursor-dot"
           >
-            <div class="cursor-dot-small"></div>
+            <div className="cursor-dot-small"></div>
           </div>
-          <div class="w-embed">
+          <div className="w-embed">
             <style></style>
           </div>
         </div>

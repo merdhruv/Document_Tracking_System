@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import "./admin.css";
 import { DownOutlined } from '@ant-design/icons';
 import { Select, Spin,Dropdown, Space } from 'antd';
@@ -6,6 +6,7 @@ import { Select, Spin,Dropdown, Space } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPlus,faList,faUser,faUserPen,faUserXmark,faUserLock,faUserMinus} from '@fortawesome/free-solid-svg-icons';
 import debounce from 'lodash/debounce';
+import axios from 'axios';
 function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState([]);
@@ -54,6 +55,14 @@ async function fetchUserList(username) {
 }
 
 export default function UserManagement() {
+
+  const [users, setUsers] = useState([]);
+  // useEffect(()=>{
+  //   axios.get("http://localhost:5000/api/user")
+  //   .then(response=>{
+  //     setUsers(response.data);
+  //   })
+  // },[])
   const items = [
     {
       label: (
@@ -147,12 +156,13 @@ export default function UserManagement() {
                 <th scope="col">Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Admin</td>
-                <td>this is </td>
-                <td>Pending</td>
+            {/* <tbody>
+             {users.map((user)=>(
+              <tr key={user.userid}>
+                <td scope='row'>{user.userid}</td>
+                <td>{user.fullname}</td>
+                <td>{user.username}</td>
+                <td>{user.status}</td>
                 <td>
                 <Dropdown
                     menu={{
@@ -167,30 +177,10 @@ export default function UserManagement() {
                     </a>
                   </Dropdown>
                 </td>
-
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Admin</td>
-                <td>this is</td>
-                <td>Ended</td>
-                <td>
-                <Dropdown
-                    menu={{
-                      items,
-                    }}
-                  >
-                    <a onClick={(e) => e.preventDefault()}>
-                      <Space>
-                      <FontAwesomeIcon icon={faList} />
-                        <DownOutlined />
-                      </Space>
-                    </a>
-                  </Dropdown>
-                </td>
-                
-              </tr>
-            </tbody>
+             ))}
+            </tbody> */}
+            
           </table>
       </div>
     </div>
