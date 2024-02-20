@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import { useLocation } from 'react-router-dom';
 
 // Import Worker
 import { Worker } from '@react-pdf-viewer/core';
@@ -11,13 +12,14 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 // Import styles of default layout plugin
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
-export default function PdfViewer() {
-
-  // creating new plugin instance
+export default function PdfViewer(props) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
+  const location = useLocation();
+  const pdfFile = location.state?.pdfFile || '';
+  console.log(pdfFile);
   // pdf file onChange state
-  const [pdfFile, setPdfFile]=useState(null);
+  // const [pdfFile, setPdfFile]=useState(null);
 
   // pdf file error state
   const [pdfError, setPdfError]=useState('');
@@ -25,33 +27,33 @@ export default function PdfViewer() {
 
   // handle file onChange event
   const allowedFiles = ['application/pdf'];
-  const handleFile = (e) =>{
-    let selectedFile = e.target.files[0];
-    // console.log(selectedFile.type);
-    if(selectedFile){
-      if(selectedFile&&allowedFiles.includes(selectedFile.type)){
-        let reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
-        reader.onloadend=(e)=>{
-          setPdfError('');
-          setPdfFile(e.target.result);
-        }
-      }
-      else{
-        setPdfError('Not a valid pdf: Please select only PDF');
-        setPdfFile('');
-      }
-    }
-    else{
-      console.log('please select a PDF');
-    }
-  }
+  // const handleFile = (e) =>{
+  //   let selectedFile = e.target.files[0];
+  //   // console.log(selectedFile.type);
+  //   if(selectedFile){
+  //     if(selectedFile&&allowedFiles.includes(selectedFile.type)){
+  //       let reader = new FileReader();
+  //       reader.readAsDataURL(selectedFile);
+  //       reader.onloadend=(e)=>{
+  //         setPdfError('');
+  //         setPdfFile(e.target.result);
+  //       }
+  //     }
+  //     else{
+  //       setPdfError('Not a valid pdf: Please select only PDF');
+  //       setPdfFile('');
+  //     }
+  //   }
+  //   else{
+  //     console.log('please select a PDF');
+  //   }
+  // }
 
   return (
     <div className="container">
 
       {/* Upload PDF */}
-      <form>
+      {/* <form>
 
         <label>Upload PDF</label>
         <br></br>
@@ -59,11 +61,10 @@ export default function PdfViewer() {
         <input type='file' className="form-control"
         onChange={handleFile}></input>
 
-        {/* we will display error message in case user select some file
-        other than pdf */}
+        
         {pdfError&&<span className='text-danger'>{pdfError}</span>}
 
-      </form>
+      </form> */}
 
       {/* View PDF */}
       View PDF

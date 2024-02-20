@@ -30,26 +30,28 @@ const App = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [islogged, setIslogged] = useState(false);
+  const [token, setToken] = useState('');
 
-  useEffect(()=>{
-    if(islogged === true){
-      navigate('/user')
-    }
-  },[islogged])
+
 
   const navigate = useNavigate();
 
-  const handleLogin = ()=>{
+  const handleLogin= ()=>{
+    console.log(token);
+    navigate("/user")
+  }
+
+  const handleSubmit = ()=>{
     axios.post("http://localhost:5000/api/admin/userlogin", {username,password})
     .then(result=>{
+      setToken(result.data.token);
       if(result.data.message === 'Success'){
-        setIslogged(true);
+        localStorage.setItem('authToken',token);
+        handleLogin();
       }
     }).catch((err)=>{
       console.log(err);
     })
-
   };
   
 
@@ -101,7 +103,7 @@ const App = () => {
             </div>
           </div>
         
-            <form className="form login_form" >
+            <form className="form login_form" onSubmit={()=>{handleSubmit()}}>
               <div className="row modal-row"> 
                 Email
                 <input

@@ -56,13 +56,17 @@ async function fetchUserList(username) {
 
 export default function UserManagement() {
 
-  const [users, setUsers] = useState([]);
-  // useEffect(()=>{
-  //   axios.get("http://localhost:5000/api/user")
-  //   .then(response=>{
-  //     setUsers(response.data);
-  //   })
-  // },[])
+  const [userslist, setUsers] = useState([]);
+  useEffect(()=>{
+    axios.get("http://localhost:5000/api/user")
+    .then(users=>{
+      setUsers(users.data.response);
+      console.log(users.data.response);
+    })
+    .catch(error => {
+      console.error("Error fetching data:", error);
+    });
+  },[])
   const items = [
     {
       label: (
@@ -137,8 +141,8 @@ export default function UserManagement() {
               }}
               />
 
-          <button type="button" className="btn btn-secondary" style={{"margin-left":"10px"}}>
-            <FontAwesomeIcon icon={faPlus} style = {{"margin-right":"10px"}} />
+          <button type="button" className="btn btn-secondary" style={{"marginLeft":"10px"}}>
+            <FontAwesomeIcon icon={faPlus} style = {{"marginRight":"10px"}} />
             Add New User
           </button>
             </span>
@@ -156,9 +160,11 @@ export default function UserManagement() {
                 <th scope="col">Action</th>
               </tr>
             </thead>
-            {/* <tbody>
-             {users.map((user)=>(
-              <tr key={user.userid}>
+            <tbody>
+              {console.log(userslist)}
+             {
+             Object.values(userslist).map((user,index)=>(
+              <tr key={index}>
                 <td scope='row'>{user.userid}</td>
                 <td>{user.fullname}</td>
                 <td>{user.username}</td>
@@ -179,7 +185,7 @@ export default function UserManagement() {
                 </td>
               </tr>
              ))}
-            </tbody> */}
+            </tbody>
             
           </table>
       </div>

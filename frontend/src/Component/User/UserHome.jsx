@@ -1,51 +1,73 @@
-import {React,useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import {React,useState,useEffect} from 'react'
+import { useNavigate,Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faXmark} from '@fortawesome/free-solid-svg-icons';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-
+import axios from 'axios';
+import Modal from "react-modal";
 import "./home.css";
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
 
-const documents = [{
-  code : '1',
-  sender : "admin",
-  details : 'file send for re-submission',
-  dateOfLetter : '21-12-2023',
-  status : 'pending',
-},
-{
-  code : '2',
-  sender : "admin",
-  details : 'for re-submission',
-  dateOfLetter : '23-12-2023',
-  status : 'pending',
-},
-{
-  code : '3',
-  sender : "admin",
-  details : 'verified',
-  dateOfLetter : '10-12-2023',
-  status : 'ended',
-},
-{
-  code : '4',
-  sender : "admin",
-  details : 'file send for re-submission',
-  dateOfLetter : '10-01-2024',
-  status : 'pending',
-},
-]
+  },
+};
+
+Modal.setAppElement("#root");
+
+
 
 export default function UserHome() {
-const [documentsList, setDocumentsList] = useState(documents);
+const [modalIsOpen, setModalIsOpen] = useState(false);
+const [documentsList, setDocumentsList] = useState([]);
+const [pdfsrc, setPdfsrc]=useState('');
+
+useEffect(()=>{
+  axios.get("http://localhost:5000/api/file")
+  .then((documents)=>{
+    setDocumentsList(documents.data.response);
+  })
+  .catch(error => {
+    console.error("Error fetching data:", error);
+  });
+},[])
 
 const navigate = useNavigate();
+
+const doclist = ()=>{
+
+  
+  return Object.values(documentsList).map((doc) => {
+
+    return <tr key={doc._id}>
+      <th>{doc.Doc_code}</th>
+      <td>{doc.sender}</td>
+      <td>{doc.description}</td>
+      <td>{doc.category}</td>
+      <td>{doc.priortization}</td>
+      <td> {doc.avatar}
+      
+        <Button type="primary" icon = {<SearchOutlined />} onClick={()=>{handleView(doc.avatar)}}>
+         view
+        </Button>
+      </td>
+    </tr>
+    })
+}
+
 const handleCompose = ()=>{
   navigate('/user/compose');
 }
-const handleView = ()=>{
-  navigate('/pdf');
+const handleView =(avatar)=>{
+  setPdfsrc(avatar);
+  setModalIsOpen(true);
+
 }
   return (
     <div>
@@ -53,7 +75,7 @@ const handleView = ()=>{
          <div className="blue-box">
             <div className="leaves">
               <h4>Incoming Documents</h4>
-              <h4>0</h4>
+              <h4>{documentsList.length}</h4>
             </div>
           </div>
           <div className="yellow-box">
@@ -77,10 +99,21 @@ const handleView = ()=>{
        </div>
        <div>
         <button type="button" className="btn btn-secondary" onClick={handleCompose}>
-          <FontAwesomeIcon icon={faPlus} style = {{"margin-right":"10px"}} />
+          <FontAwesomeIcon icon={faPlus} style = {{"marginRight":"10px"}} />
           Compose
         </button>
        </div>
+       <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        style={customStyles}
+      >
+        <button className= "cancel-button" id="form-open" onClick={() => setModalIsOpen(false)}>
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
+        <iframe src={pdfsrc} width="100%" height="500px" />
+        
+      </Modal>
       
       <div className='table-container'>
         <table className="table table-bordered caption-top">
@@ -90,25 +123,14 @@ const handleView = ()=>{
                 <th scope="col">Doc Code</th>
                 <th scope="col">Sender</th>
                 <th scope="col">Details</th>
-                <th scope="col">Date of Letter </th>
+                <th scope="col">Category </th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
-            {documentsList.map((doc) => (
-            <tr key={doc.code}>
-              <th scope="row">{doc.code}</th>
-              <td>{doc.sender}</td>
-              <td>{doc.details}</td>
-              <td>{doc.dateOfLetter}</td>
-              <td>{doc.status}</td>
-              <td> <Button type="primary" icon={<SearchOutlined />} onClick={handleView}>
-                 view
-                </Button>
-              </td>
-            </tr>
-          ))}
+              {/* {console.log(documentsList)} */}
+              {doclist()}
             </tbody>
           </table>
       </div>
