@@ -7,15 +7,17 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-.cancel-button{
+
+.cancel-button {
   position: relative;
-  left: 20px; 
+  left: 20px;
   padding: 6px 12px;
   border: 2px solid black;
   border-radius: 6px;
   cursor: pointer;
 }
-.modal-row{
+
+.modal-row {
   padding: 20px;
 }
 
@@ -31,8 +33,14 @@ a {
   padding: 10px 20px;
   z-index: 1000;
   color: white;
-  background-color: black;
+  background-color: rgb(131, 126, 126);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+  width: 100%; /* Set the desired width */
+  height: 200px; /* Set the desired height */
+  object-fit: cover; /* Ensure the image covers the entire space */
 }
 
 
@@ -60,7 +68,7 @@ a {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 15px;
+  padding: 0px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
 }
@@ -105,12 +113,51 @@ a {
 
 .nav_link:hover {
   color: white;
+  background-color: #666;
+}
+.header .nav_logo {
+  display: block;
+  padding: 4px;
+  margin: 13px;
+}
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-statement {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  text-align: center;
+}
+
+.card-statement p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.header .nav_logo img {
+  display: block;
+  max-width: 60px;
+  height: auto;
+  margin: 0 auto;
+  /* vertical-align: middle; */
+}
+
+.header .nav_logo a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .button {
   padding: 6px 24px;
   border: 2px solid black;
-  background: black;
+  background: rgb(98, 105, 167);
   border-radius: 6px;
   cursor: pointer;
 }
@@ -427,8 +474,8 @@ body {
   background-color: #555;
 }
 
-.footer-social  {
- display: inline;
+.footer-social {
+  display: inline;
   margin-right: 10px;
 }
 
@@ -481,6 +528,7 @@ body {
 
 .nav_item {
   margin-right: 20px;
+  padding: 10px;
   /* Adjust margin as needed */
 }
 
@@ -520,7 +568,7 @@ body {
   width: 100%;
   z-index: 1000;
   /* Ensure header is above other elements */
-  background-color: black;
+  background-color: rgb(126, 162, 190);
   color: white;
   /* Adjust background color as needed */
   padding: 10px 20px;
@@ -592,6 +640,8 @@ body {
   text-align: center;
 }
 
+
+
 /* Media Queries */
 @media screen and (max-width: 768px) {
   .footer-content-wrap {
@@ -606,5 +656,60 @@ body {
   .card {
     flex-basis: calc(100% - 20px);
     /* Full width on smaller screens */
+  }
+  
+  .header {
+    padding: 10px 10px;
+  }
+
+  .nav_logo {
+    font-size: 18px;
+  }
+
+  .nav_items {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav_item {
+    margin: 10px 0;
+  }
+
+  .nav_link {
+    padding: 5px;
+  }
+
+  .details_container {
+    margin-top: 100px;
+    padding: 20px 10px;
+  }
+
+  .responsive_cards {
+    padding: 0 10px;
+    margin-top: 10px;
+  }
+
+  .card {
+    flex: 1 0 calc(50% - 20px);
+    max-width: calc(50% - 20px);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .nav_logo {
+    font-size: 16px;
+  }
+
+  .details_container {
+    margin-top: 120px;
+  }
+
+  .responsive_cards {
+    margin-top: 5px;
+  }
+
+  .card {
+    flex: 1 0 100%;
+    max-width: 100%;
   }
 }

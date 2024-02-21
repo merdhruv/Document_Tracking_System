@@ -36,12 +36,12 @@
 // }
 
 // export default UserNavbar;
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import "./home.css"
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
@@ -52,7 +52,8 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </div>
 ));
 
-function UserNavbar() {
+function UserNavbar({setToken, token}) {
+  const navigate = useNavigate();
   return (
     <nav className="navbar bg-dark navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
@@ -70,19 +71,19 @@ function UserNavbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarText">
+        <div className="collapse navbar-collapse" id="navbarText" style = {{"position" : "relative", "justifyContent":"end"}}>
           <Dropdown>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
               <Dropdown.Item eventKey="1">
-                <Link className="dropdown-item" to="/user" exact activeClassName="active">
+                <Link className="dropdown-item" to="/" exact activeClassName="active">
                   Incoming
                 </Link>
               </Dropdown.Item>
               <Dropdown.Item eventKey="2">
-                <Link className="dropdown-item" to="/user/outgoing" activeClassName="active">
+                <Link className="dropdown-item" to="/outgoing" activeClassName="active">
                   Outgoing
                 </Link>
               </Dropdown.Item>
@@ -92,9 +93,12 @@ function UserNavbar() {
                 </Link>
               </Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="4"><Link className="dropdown-item" to="/" exact activeClassName="active">
+              <Dropdown.Item eventKey="4"><Button className="dropdown-item" onClick={(e)=>{
+                sessionStorage.clear();
+                window.location.href = '/';
+                }} exact activeClassName="active">
                   Sign Out
-                </Link></Dropdown.Item>
+                </Button></Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>

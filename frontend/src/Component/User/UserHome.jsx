@@ -1,8 +1,8 @@
 import {React,useState,useEffect} from 'react'
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPlus, faXmark} from '@fortawesome/free-solid-svg-icons';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined,DeleteOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import axios from 'axios';
 import Modal from "react-modal";
@@ -28,7 +28,7 @@ const [modalIsOpen, setModalIsOpen] = useState(false);
 const [documentsList, setDocumentsList] = useState([]);
 const [pdfsrc, setPdfsrc]=useState('');
 
-useEffect(()=>{
+const fetchData = ()=>{
   axios.get("http://localhost:5000/api/file")
   .then((documents)=>{
     setDocumentsList(documents.data.response);
@@ -36,7 +36,28 @@ useEffect(()=>{
   .catch(error => {
     console.error("Error fetching data:", error);
   });
+}
+
+const handleRefresh = ()=>{
+  fetchData();
+}
+
+useEffect(()=>{
+  fetchData();
 },[])
+
+const handleDelete = (doc)=>{
+  
+    axios.post("http://localhost:5000/api/file/delete", {Doc_code:doc._id})
+    .then(res=>{
+      console.log(res.data.message);
+      alert("file deleted")
+      handleRefresh();
+    })
+    .catch((err)=>{
+    console.log('error', err)
+  })
+}
 
 const navigate = useNavigate();
 
@@ -51,10 +72,13 @@ const doclist = ()=>{
       <td>{doc.description}</td>
       <td>{doc.category}</td>
       <td>{doc.priortization}</td>
-      <td> {doc.avatar}
+      <td > 
       
-        <Button type="primary" icon = {<SearchOutlined />} onClick={()=>{handleView(doc.avatar)}}>
+        <Button type="primary" ghost icon = {<SearchOutlined />} style={{"marginRight":"10px"}} onClick={()=>{handleView(doc)}}>
          view
+        </Button>
+        <Button type="primary" danger ghost icon = {<DeleteOutlined />} onClick={()=>{handleDelete(doc)}}>
+         Delete
         </Button>
       </td>
     </tr>
@@ -62,13 +86,12 @@ const doclist = ()=>{
 }
 
 const handleCompose = ()=>{
-  navigate('/user/compose');
+  navigate('/compose');
 }
-const handleView =(avatar)=>{
-  setPdfsrc(avatar);
-  setModalIsOpen(true);
+const handleView = (doc) => {
+  navigate(`/PdfViewer/${doc.filename}`);
+};
 
-}
   return (
     <div>
         <div className="black-box">
@@ -81,19 +104,19 @@ const handleView =(avatar)=>{
           <div className="yellow-box">
             <div className="leaves">
               <h4>Pending Documents</h4>
-              <h4>0</h4>
+              <h4>2</h4>
             </div>
           </div>
           <div className="green-box">
             <div className="leaves">
               <h4>Received Documents</h4>
-              <h4>0</h4>  
+              <h4>2</h4>  
             </div>
           </div>
           <div className="red-box">
             <div className="leaves">
               <h4>Ended Documents</h4>
-              <h4>0</h4>  
+              <h4>1</h4>  
             </div>
           </div>
        </div>

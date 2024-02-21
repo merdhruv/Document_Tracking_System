@@ -1,6 +1,6 @@
-import './register.css';
+// import './register.css';
 import { useState } from "react";
-import { validateEmail } from "./utils";
+import { validateEmail } from "../utils";
 import axios from 'axios';
 
 const PasswordErrorMessage = () => {
@@ -9,7 +9,7 @@ const PasswordErrorMessage = () => {
   );
 };
 
-export default function Register() {
+export default function UpdateUser() {
   const [userid, setUserId] = useState("");
   const [fullname, setFullName] = useState("");
   const [username, setUsername] = useState("");
@@ -46,7 +46,7 @@ export default function Register() {
     e.preventDefault();
     let url = '';
     if (role === 'user') { 
-      url = 'http://localhost:5000/api/user/adduser';
+      url = 'http://localhost:5000/api/user/update';
     } else if (role === 'admin') { 
       url = 'http://localhost:5000/api/admin/register';
     }
@@ -75,7 +75,7 @@ export default function Register() {
   return (
     <div className="RegistrationApp">
       <form onSubmit={handleSubmit} className="registrationForm">
-        <h2>New User</h2>
+        <h2>REGISTRATION FORM</h2>
         <div className="formRow">
           <div className="Field">
             <label>User ID <sup>*</sup></label>

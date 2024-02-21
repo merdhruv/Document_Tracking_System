@@ -1,0 +1,80 @@
+.red-box {
+    display: flex;
+    background-color: #f24343;
+    color: white;
+    height: 8rem;
+    width: 15rem;
+    border: 1px solid red;
+    margin-left: 100px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.blue-box {
+    display: flex;
+    background-color: #43bef7;
+    color: white;
+    height: 8rem;
+    width: 15rem;
+    border: 1px solid blue;
+    margin-left: 100px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.green-box {
+    display: flex;
+    background-color: rgb(90, 227, 90);
+    color: white;
+    height: 8rem;
+    width: 15rem;
+    border: 1px solid lightgreen;
+    margin-left: 100px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.yellow-box {
+    display: flex;
+    background-color:rgb(255, 217, 0);
+    color: white;
+    height: 8rem;
+    width: 15rem;
+    border: 1px solid rgb(255, 217, 0);
+    margin-left: 100px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.black-box {
+    display: flex;
+    background-color: #434242;
+    color: white;
+    padding: 40px;
+    border: 1px solid black;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.table-container{
+    margin: 10px,20px;
+    padding: 30px;
+}
+.user-form{
+   margin-left : 200px;
+   margin-top: 40px;
+   
+}
+.icon-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 8px;
+    
+  }

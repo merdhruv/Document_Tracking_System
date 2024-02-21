@@ -1,90 +1,60 @@
-import {useState} from 'react'
-import { useLocation } from 'react-router-dom';
-
-// Import Worker
-import { Worker } from '@react-pdf-viewer/core';
-// Import the main Viewer component
-import { Viewer } from '@react-pdf-viewer/core';
-// Import the styles
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
-// default layout plugin
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-// Import styles of default layout plugin
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import axios from 'axios';
 
-export default function PdfViewer(props) {
+function PdfViewer() {
+  const { filename } = useParams(); // Make sure you receive the filename parameter correctly
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [pdfFile, setPdfFile] = useState('');
+  const [pdfError, setPdfError] = useState('');
 
-  const location = useLocation();
-  const pdfFile = location.state?.pdfFile || '';
-  console.log(pdfFile);
-  // pdf file onChange state
-  // const [pdfFile, setPdfFile]=useState(null);
+  useEffect(() => {
+    const fetchPdf = async () => {
+      try {
+        console.log('Filename:', filename);
+        if (!filename) {
+          throw new Error('No filename provided');
+        }
 
-  // pdf file error state
-  const [pdfError, setPdfError]=useState('');
+        const response = await axios.get(`http://localhost:5000/uploads/${filename}`, {
+          responseType: "blob",
+        });
 
+        if (!response.data) {
+          throw new Error('No PDF data received');
+        }
 
-  // handle file onChange event
-  const allowedFiles = ['application/pdf'];
-  // const handleFile = (e) =>{
-  //   let selectedFile = e.target.files[0];
-  //   // console.log(selectedFile.type);
-  //   if(selectedFile){
-  //     if(selectedFile&&allowedFiles.includes(selectedFile.type)){
-  //       let reader = new FileReader();
-  //       reader.readAsDataURL(selectedFile);
-  //       reader.onloadend=(e)=>{
-  //         setPdfError('');
-  //         setPdfFile(e.target.result);
-  //       }
-  //     }
-  //     else{
-  //       setPdfError('Not a valid pdf: Please select only PDF');
-  //       setPdfFile('');
-  //     }
-  //   }
-  //   else{
-  //     console.log('please select a PDF');
-  //   }
-  // }
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(blob);
+        setPdfFile(pdfUrl);
+      } catch (error) {
+        console.error('Error fetching PDF:', error);
+        setPdfError('Error fetching PDF. Please try again later.');
+      }
+    };
+
+    fetchPdf();
+  }, [filename]);
 
   return (
     <div className="container">
-
-      {/* Upload PDF */}
-      {/* <form>
-
-        <label>Upload PDF</label>
-        <br></br>
-
-        <input type='file' className="form-control"
-        onChange={handleFile}></input>
-
-        
-        {pdfError&&<span className='text-danger'>{pdfError}</span>}
-
-      </form> */}
-
-      {/* View PDF */}
-      View PDF
       <div className="viewer">
-
-        {/* render this if we have a pdf file */}
-        {pdfFile&&(
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-            <Viewer fileUrl={pdfFile}
-            plugins={[defaultLayoutPluginInstance]}></Viewer>
+        {pdfFile ? (
+          <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js">
+            <Viewer fileUrl={pdfFile} plugins={[defaultLayoutPluginInstance]} />
           </Worker>
+        ) : pdfError ? (
+          <div className="error">{pdfError}</div>
+        ) : (
+          <div className="loading">Loading PDF...</div>
         )}
-
-        {/* render this if we have pdfFile state null   */}
-        {!pdfFile&&<>No file is selected yet</>}
-
       </div>
-
     </div>
   );
 }
 
- 
+export default PdfViewer;
