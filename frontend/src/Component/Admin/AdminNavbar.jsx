@@ -54,11 +54,6 @@ function AdminNavbar({setToken, token}) {
                   User Management
                 </Link>
               </Dropdown.Item>
-              <Dropdown.Item eventKey="4">
-                <Link className="dropdown-item" to="/admin/my-account" activeClassName="active">
-                  My Account
-                </Link>
-              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="5"><Button className="dropdown-item" onClick={(e)=>{
                 sessionStorage.clear();

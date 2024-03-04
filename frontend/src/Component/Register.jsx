@@ -2,6 +2,8 @@ import './register.css';
 import { useState } from "react";
 import { validateEmail } from "./utils";
 import axios from 'axios';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 const PasswordErrorMessage = () => {
   return (
@@ -9,7 +11,7 @@ const PasswordErrorMessage = () => {
   );
 };
 
-export default function Register() {
+export default function Register({setToken, token}) {
   const [userid, setUserId] = useState("");
   const [fullname, setFullName] = useState("");
   const [username, setUsername] = useState("");
@@ -75,6 +77,15 @@ export default function Register() {
   return (
     <div className="RegistrationApp">
       <form onSubmit={handleSubmit} className="registrationForm">
+      <Button type="primary" danger ghost icon = {<DeleteOutlined />} onClick={()=>{
+          sessionStorage.clear();
+          window.location.href = '/';
+        }}>
+         close
+        </Button>
+        <button
+        
+        ></button>
         <h2>New User</h2>
         <div className="formRow">
           <div className="Field">

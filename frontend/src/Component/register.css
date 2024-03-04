@@ -75,3 +75,6 @@ button[type="submit"]:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+sup{
+  color: red;
+}

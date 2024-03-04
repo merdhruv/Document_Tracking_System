@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import UserNavbar from './Component/User/UserNavbar';
 import UserHome from './Component/User/UserHome';
 import AdminNavbar from './Component/Admin/AdminNavbar';
@@ -24,30 +24,21 @@ function getToken() {
 }
 
 function App() {
+  const navigate = useNavigate();
 
   const token = getToken()
 
   if(!token) {
     return <Login setToken={setToken} />
   }
-  if(token.message === 'success'){
-    return <>
-    <UserNavbar setToken = {setToken} token = {token}/>
-    <UserHome/>
-    </>
-  }
-  if(token.message === 'admin'){
-    return <>
-    <AdminNavbar/>
-    <UserHome/>
-    </>
-  }
+  
+  
   return (
         <div className="App">
           <Routes>
-            <Route path='register'element={<Register/>} />
+            <Route path='/register'element={<Register/>} />
             <Route path = "/PdfViewer/:filename" element = {<PdfViewer/>} />
-            <Route path="/" element={
+            <Route path="/user" element={
               <>
               <UserNavbar setToken = {setToken} token = {token}/>
               <UserHome/>
@@ -59,31 +50,31 @@ function App() {
               <UserHome/>
               </>
             }/>
-            <Route path = "/outgoing" element={
+            <Route path = "/user/outgoing" element={
               <>
               <UserNavbar/>
               <Outgoing/>
               </>
             }/>
-            <Route path = "/compose" element={
+            <Route path = "/user/compose" element={
               <>
               <UserNavbar/>
               <Compose/>
               </>
             } />
-            <Route path = "admin/usermanage" element={
+            <Route path = "/admin/usermanage" element={
               <>
               <AdminNavbar/>
               <UserManagement/>
               </>
             }/>
-          <Route path = "admin/outgoing" element={
+          <Route path = "/admin/outgoing" element={
               <>
               <AdminNavbar/>
               <AdminOutgoing/>
               </>
             }/>
-            <Route path = "admin/update" element={
+            <Route path = "/admin/update" element={
               <>
               <AdminNavbar/>
               <UpdateUser/>

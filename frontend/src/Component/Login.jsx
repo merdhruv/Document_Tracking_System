@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-modal";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "antd";
 
 const roles = [
   { value: "user", text: "User" },
@@ -40,12 +41,10 @@ const Login = ({ setToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(roles[0].value);
+  const navigate = useNavigate();
 
   async function loginUser(credentials) {
-    const url =
-      role === "user"
-        ? "http://localhost:5000/api/admin/userlogin"
-        : "http://localhost:5000/api/admin/adminlogin";
+    const url = "http://localhost:5000/api/user/login";
     return fetch(url, {
       method: "POST",
       headers: {
@@ -55,6 +54,12 @@ const Login = ({ setToken }) => {
     }).then((data) => data.json());
   }
 
+  // const handleLogin = ()=>{
+  //   if(role === 'admin'){
+  //     navigate('/admin')
+  //   }
+  // }
+
   const handleSubmit = async () => {
     const token = await loginUser({
       username,
@@ -62,6 +67,23 @@ const Login = ({ setToken }) => {
       role,
     });
     setToken(token);
+    if(token.message === 'Success User'){
+      navigate('/user');
+    }
+    else if(token.message === 'Success Admin'){
+      navigate('/admin')
+    }
+    console.log(token.message)
+    
+  };
+  const handleRegister = async () => {
+    
+    setToken({
+      message:"register",
+      token : 'lkadshfhjasdkbjfhj'
+    });
+    window.location.href = '/register';
+    
   };
 
   return (
@@ -75,6 +97,7 @@ const Login = ({ setToken }) => {
               alt="Document Tracker Logo"
             />
           </a>
+          <h1>Document Tracking System</h1>
           {/* <ul className="nav_items">
             <li className="nav_item">
               <a href="#" className="nav_link">
@@ -159,9 +182,13 @@ const Login = ({ setToken }) => {
             </div>
             <div className="row modal-row">
               New User?{" "}
-              <Link to="/register" style={{ width: "20%" }}>
+              <Button
+              onClick = {()=>{
+                handleRegister()
+              }} 
+               style={{ width: "50%" }}>
                 Register
-              </Link>
+              </Button>
             </div>
           </form>
         </div>

@@ -78,20 +78,16 @@ function UserNavbar({setToken, token}) {
 
             <Dropdown.Menu>
               <Dropdown.Item eventKey="1">
-                <Link className="dropdown-item" to="/" exact activeClassName="active">
+                <Link className="dropdown-item" to="/user" exact activeClassName="active">
                   Incoming
                 </Link>
               </Dropdown.Item>
               <Dropdown.Item eventKey="2">
-                <Link className="dropdown-item" to="/outgoing" activeClassName="active">
+                <Link className="dropdown-item" to="/user/outgoing" activeClassName="active">
                   Outgoing
                 </Link>
               </Dropdown.Item>
-              <Dropdown.Item eventKey="3">
-                <Link className="dropdown-item" to="/user/my-account" activeClassName="active">
-                  My Account
-                </Link>
-              </Dropdown.Item>
+              
               <Dropdown.Divider />
               <Dropdown.Item eventKey="4"><Button className="dropdown-item" onClick={(e)=>{
                 sessionStorage.clear();
