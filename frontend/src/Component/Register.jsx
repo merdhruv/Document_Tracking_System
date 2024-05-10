@@ -10,8 +10,13 @@ const PasswordErrorMessage = () => {
     <p className="FieldError">Password should have at least 8 characters</p>
   );
 };
+const ContactErrMsg = ()=>{
+  return(
+    <p className='FieldError'>Contact shouldhave 10 digits</p>
+  )
+}
 
-export default function Register({setToken, token}) {
+export default function Register() {
   const [userid, setUserId] = useState("");
   const [fullname, setFullName] = useState("");
   const [username, setUsername] = useState("");
@@ -46,12 +51,7 @@ export default function Register({setToken, token}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let url = '';
-    if (role === 'user') { 
-      url = 'http://localhost:5000/api/user/adduser';
-    } else if (role === 'admin') { 
-      url = 'http://localhost:5000/api/admin/register';
-    }
+    let url = 'http://localhost:5000/api/user/adduser';
 
     axios.post(url, {
       userid,
@@ -80,12 +80,13 @@ export default function Register({setToken, token}) {
       <Button type="primary" danger ghost icon = {<DeleteOutlined />} onClick={()=>{
           sessionStorage.clear();
           window.location.href = '/';
-        }}>
+          
+        }}
+        style={{"marginRight": "500px"}}
+        >
          close
         </Button>
-        <button
         
-        ></button>
         <h2>New User</h2>
         <div className="formRow">
           <div className="Field">
@@ -122,6 +123,7 @@ export default function Register({setToken, token}) {
               placeholder="Contact"
               type="number"
             />
+            {contact.length > 0 && contact.length !== 10  && < ContactErrMsg />}
           </div>
         </div>
         <div className="formRow">

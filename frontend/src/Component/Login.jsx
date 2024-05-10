@@ -3,7 +3,6 @@ import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-modal";
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd";
 
 const roles = [
@@ -24,24 +23,12 @@ const customStyles = {
 };
 
 Modal.setAppElement("#root");
-// async function loginUser(credentials) {
-
-//   return fetch("http://localhost:5000/api/admin/userlogin", {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(credentials)
-//   })
-//     .then(data => data.json())
-//  }
 
 const Login = ({ setToken }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(roles[0].value);
-  const navigate = useNavigate();
 
   async function loginUser(credentials) {
     const url = "http://localhost:5000/api/user/login";
@@ -54,11 +41,7 @@ const Login = ({ setToken }) => {
     }).then((data) => data.json());
   }
 
-  // const handleLogin = ()=>{
-  //   if(role === 'admin'){
-  //     navigate('/admin')
-  //   }
-  // }
+ 
 
   const handleSubmit = async () => {
     const token = await loginUser({
@@ -68,10 +51,10 @@ const Login = ({ setToken }) => {
     });
     setToken(token);
     if(token.message === 'Success User'){
-      navigate('/user');
+      window.location.href = '/user';
     }
     else if(token.message === 'Success Admin'){
-      navigate('/admin')
+      window.location.href = '/admin';
     }
     console.log(token.message)
     
@@ -91,7 +74,7 @@ const Login = ({ setToken }) => {
       {/* Header */}
       <header className="header">
         <nav className="nav">
-          <a href={"http://localhost:5000"} className="nav_logo">
+          <a href={"http://localhost:3000"} className="nav_logo">
             <img
               src="https://images-workbench.99static.com/alRM7OHaLHbw-HDzd4AS1YnD8CU=/http://s3.amazonaws.com/projects-files/18/1847/184768/da7b63f4-dac3-557b-2589-4412be10ab47.png"
               alt="Document Tracker Logo"
@@ -162,9 +145,9 @@ const Login = ({ setToken }) => {
 
           <form className="form login_form" onSubmit={handleSubmit}>
             <div className="row modal-row">
-              Username
+              Email
               <input
-                type="username"
+                type="email"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -210,13 +193,13 @@ const Login = ({ setToken }) => {
         <div className="row">
           <div className="col-md-4">
             <div className="responsive_cards card">
-              <a href="#">
+              
                 <img
                   src="https://w7.pngwing.com/pngs/576/642/png-transparent-data-analysis-analytics-management-big-data-data-processing-business-template-text-people-thumbnail.png"
                   alt="Card 1"
                   className="card-image"
                 />
-              </a>
+              
               <div className="card-statement">
                 <p>Searching the Documents</p>
               </div>
@@ -224,13 +207,13 @@ const Login = ({ setToken }) => {
           </div>
           <div className="col-md-4">
             <div className="responsive_cards card">
-              <a href="#">
+              
                 <img
                   src="https://w7.pngwing.com/pngs/477/619/png-transparent-man-sitting-in-front-of-computer-monitors-network-operations-center-network-monitoring-management-information-security-operations-center-business-analyst-computer-network-service-people-thumbnail.png"
                   alt="Card 2"
                   className="card-image"
                 />
-              </a>
+              
               <div className="card-statement">
                 <p>Managing the Documents</p>
               </div>
@@ -238,13 +221,13 @@ const Login = ({ setToken }) => {
           </div>
           <div className="col-md-4">
             <div className="responsive_cards card">
-              <a href="#">
+              
                 <img
                   src="https://w7.pngwing.com/pngs/653/323/png-transparent-customer-relationship-management-business-customer-service-rent-miscellaneous-angle-text-thumbnail.png"
                   alt="Card 3"
                   className="card-image"
                 />
-              </a>
+              
               <div className="card-statement">
                 <p>B2C Relations</p>
               </div>
@@ -263,7 +246,7 @@ const Login = ({ setToken }) => {
             <div className="footer-content-wrap">
               <div className="footer-left-block">
                 <div className="footer-acknowledgement">
-                  <a>
+                  
                     {/* <img
                       src="https://scontent.fblr22-2.fna.fbcdn.net/v/t39.30808-6/342022383_889796985425626_4868738027538509982_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=rcVR7DWzTmYAX--GebK&_nc_ht=scontent.fblr22-2.fna&oh=00_AfBBrbSvWxNw5YR6WVYx96zS9d5Rjk-s0bKZG5PSTaG11Q&oe=65D2B2A5"
                       loading="lazy"
@@ -272,7 +255,7 @@ const Login = ({ setToken }) => {
                       className="footer-logo"
                     /> */}
                     <p className="footer-logo-text">DOCUMENT TRACKING SYSTEM</p>
-                  </a>
+
                   <div className="body-small">
                     Our Document Tracking System provides a seamless solution
                     for managing your documents efficiently. Designed with
@@ -295,11 +278,7 @@ const Login = ({ setToken }) => {
                     className="footer-icons-wrap"
                     style={{ display: "flex" }}
                   >
-                    <a
-                      href=""
-                      target="_blank"
-                      className="social-icon-block w-inline-block"
-                    >
+                    
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac703f4433e644d297d_icon-social-facebook.svg"
                         loading="lazy"
@@ -307,12 +286,8 @@ const Login = ({ setToken }) => {
                         className="social-icon"
                       />
                       <div className="bg-btn-animate is-social"></div>
-                    </a>
-                    <a
-                      href=""
-                      target="_blank"
-                      className="social-icon-block w-inline-block"
-                    >
+
+                    
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac73d90a44d405c1067_icon-social-twitter.svg"
                         loading="lazy"
@@ -320,12 +295,8 @@ const Login = ({ setToken }) => {
                         className="social-icon"
                       />
                       <div className="bg-btn-animate is-social"></div>
-                    </a>
-                    <a
-                      href=""
-                      target="_blank"
-                      className="social-icon-block w-inline-block"
-                    >
+
+
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac78d8367ec0922c640_icon-social-instagram.svg"
                         loading="lazy"
@@ -333,12 +304,8 @@ const Login = ({ setToken }) => {
                         className="social-icon"
                       />
                       <div className="bg-btn-animate is-social"></div>
-                    </a>
-                    <a
-                      href=""
-                      target="_blank"
-                      className="social-icon-block w-inline-block"
-                    >
+                    
+                    
                       <img
                         src="https://assets-global.website-files.com/6411205aa4059e3917a059f4/6423cac7889b6aa4dfc8bf31_icon-social-linkedin.svg"
                         loading="lazy"
@@ -346,7 +313,7 @@ const Login = ({ setToken }) => {
                         className="social-icon"
                       />
                       <div className="bg-btn-animate is-social"></div>
-                    </a>
+                    
                   </div>
                 </div>
               </div>

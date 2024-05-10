@@ -85,7 +85,7 @@ const doclist = ()=>{
 }
 
 const handleCompose = ()=>{
-  navigate('/compose');
+  navigate('/user/compose');
 }
 const handleView = (doc) => {
   navigate(`/PdfViewer/${doc.filename}`);
