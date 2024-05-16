@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useRef} from "react";
 import Modal from "react-modal";
 import "./index.css";
 import {useFormik} from 'formik';
@@ -38,7 +38,7 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export default function Login({ setToken }) {
-  
+
   async function loginUser(credentials) {
     const url = "http://localhost:5000/api/user/login";
     return fetch(url, {
