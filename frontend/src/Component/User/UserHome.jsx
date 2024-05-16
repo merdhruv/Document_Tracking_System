@@ -1,161 +1,167 @@
-import {React,useState,useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPlus, faXmark} from '@fortawesome/free-solid-svg-icons';
-import { SearchOutlined,DeleteOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import React,{useState, useEffect} from 'react'
 import axios from 'axios';
-import Modal from "react-modal";
-import "./home.css";
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import {Card, Grid, Typography,Button} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { useNavigate } from 'react-router-dom';
 
-  },
-};
-
-Modal.setAppElement("#root");
-
-
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  
+ 
+  
+  
 
 export default function UserHome() {
-const [modalIsOpen, setModalIsOpen] = useState(false);
-const [documentsList, setDocumentsList] = useState([]);
-const [pdfsrc, setPdfsrc]=useState('');
+    const navigate = useNavigate();
 
-const fetchData = ()=>{
-  axios.get("http://localhost:5000/api/file")
-  .then((documents)=>{
-    setDocumentsList(documents.data.response);
-  })
-  .catch(error => {
-    console.error("Error fetching data:", error);
-  });
-}
+    const [documentsList, setDocumentsList] = useState([]);
 
-const handleRefresh = ()=>{
-  fetchData();
-}
-
-useEffect(()=>{
-  fetchData();
-},[])
-
-const handleDelete = (doc)=>{
-  
-    axios.post("http://localhost:5000/api/file/delete", {Doc_code:doc._id})
-    .then(res=>{
-      console.log(res.data.message);
-      alert("file deleted")
-      handleRefresh();
-    })
-    .catch((err)=>{
-    console.log('error', err)
-  })
-}
-
-const navigate = useNavigate();
-
-const doclist = ()=>{
-
-  
-  return Object.values(documentsList).map((doc) => {
-
-    return <tr key={doc._id}>
-      <th>{doc.Doc_code}</th>
-      <td>{doc.sender}</td>
-      <td>{doc.recipient}</td>
-      <td>{doc.category}</td>
-      <td > 
+    const fetchData = ()=>{
+        axios.get("http://localhost:5000/api/file")
+        .then((documents)=>{
+          setDocumentsList(documents.data.response);
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+        });
+      }
+      const handleRefresh = ()=>{
+        fetchData();
+      }
       
-        <Button type="primary" ghost icon = {<SearchOutlined />} style={{"marginRight":"10px"}} onClick={()=>{handleView(doc)}}>
-         view
-        </Button>
-        <Button type="primary" danger ghost icon = {<DeleteOutlined />} onClick={()=>{handleDelete(doc)}}>
-         Delete
-        </Button>
-      </td>
-    </tr>
-    })
-}
-
-const handleCompose = ()=>{
-  navigate('/user/compose');
-}
-const handleView = (doc) => {
-  navigate(`/PdfViewer/${doc.filename}`);
-};
-
+      useEffect(()=>{
+        fetchData();
+      },[])
+      const handleDelete = (doc)=>{
+  
+        axios.post("http://localhost:5000/api/file/delete", {Doc_code:doc._id})
+        .then(res=>{
+          console.log(res.data.message);
+          alert("file deleted")
+          handleRefresh();
+        })
+        .catch((err)=>{
+        console.log('error', err)
+      })
+    }
+    const handleCompose = ()=>{
+        navigate('/user/compose');
+      }
+      const handleView = (doc) => {
+        navigate(`/PdfViewer/${doc.filename}`);
+      };
   return (
-    <div>
-        <div className="black-box">
-         <div className="blue-box">
-            <div className="leaves">
-              <h4>Incoming Documents</h4>
-              <h4>{documentsList.length}</h4>
-            </div>
-          </div>
-          <div className="yellow-box">
-            <div className="leaves">
-              <h4>Pending Documents</h4>
-              <h4>2</h4>
-            </div>
-          </div>
-          <div className="green-box">
-            <div className="leaves">
-              <h4>Received Documents</h4>
-              <h4>2</h4>  
-            </div>
-          </div>
-          <div className="red-box">
-            <div className="leaves">
-              <h4>Ended Documents</h4>
-              <h4>1</h4>  
-            </div>
-          </div>
-       </div>
-       <div>
-        <button type="button" className="btn btn-secondary" onClick={handleCompose}>
-          <FontAwesomeIcon icon={faPlus} style = {{"marginRight":"10px"}} />
-          Compose
-        </button>
-       </div>
-       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        style={customStyles}
-      >
-        <button className= "cancel-button" id="form-open" onClick={() => setModalIsOpen(false)}>
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-        <iframe src={pdfsrc} width="100%" height="500px" />
-        
-      </Modal>
-      
-      <div className='table-container'>
-        <table className="table table-bordered caption-top">
-          <caption>List of Documents</caption>
-            <thead className='table-dark'>
-              <tr>
-                <th scope="col">Doc Code</th>
-                <th scope="col">Sender</th>
-                <th scope="col">Recipient</th>
-                <th scope="col">Category </th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {console.log(documentsList)} */}
-              {doclist()}
-            </tbody>
-          </table>
-      </div>
-      
-    </div>
+    <ThemeProvider theme={createTheme()}>
+        <CssBaseline>
+            <Grid container spacing={3} sx={{ backgroundColor: 'gray', color: 'white', p: 2, mt:2  }} >
+                <Grid item xs={12} sm={3}>
+                    <Card sx = {{p : 6 ,backgroundColor : '#add8e6', height: '220px'}}>
+                        <Typography variant='h4'>
+                            Incoming Document
+                        </Typography> 
+                        <Typography variant='h4'sx={{pl:7, pt:2}} >{documentsList.length}</Typography>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                    <Card sx = {{p:6,backgroundColor : '#ffff94', height: '220px' }}>
+                        <Typography variant='h4'>
+                            Pending Document
+                        </Typography>
+                        <Typography variant='h4'sx={{pl:7, pt:2}} >3</Typography>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                    <Card sx = {{p:6,backgroundColor : '#7aeb7a', height: '220px' }} > 
+                    <Typography variant='h4'>
+                            Received Document
+                        </Typography>
+                        <Typography variant='h4'sx={{pl:7, pt:2}} >2</Typography>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                    <Card sx = {{p:6, backgroundColor : '#ff4d4d', height: '220px' }} > 
+                    <Typography variant='h4'>
+                            Ended Document
+                    </Typography>
+                        <Typography variant='h4'sx={{pl:7, pt:2}} >1</Typography>
+                    </Card>
+                </Grid>
+
+            </Grid>
+            
+            <Button variant='contained' onClick={handleCompose} sx={{ display: 'block', margin: 'auto' ,mt:2}}>
+                Compose 
+            </Button>
+              
+
+        {/* Table */}
+
+        <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700, mt:3 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell >Doc. Code</StyledTableCell>
+            <StyledTableCell align="right">Sender</StyledTableCell>
+            <StyledTableCell align="right">Recipent</StyledTableCell>
+            <StyledTableCell align="right">Category</StyledTableCell>
+            <StyledTableCell align="right">Action</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {documentsList.map((row) => (
+            <StyledTableRow key={row.Doc_code}>
+              <StyledTableCell component="th" scope="row">
+                {row.Doc_code}
+              </StyledTableCell>
+              <StyledTableCell align="right">{row.sender}</StyledTableCell>
+              <StyledTableCell align="right">{row.recipient}</StyledTableCell>
+              <StyledTableCell align="right">{row.category}</StyledTableCell>
+              <StyledTableCell align="right">
+                    <Button variant="contained" startIcon={<SendIcon />} style={{"marginRight":"10px"}} onClick={()=>{handleView(row)}}>
+                        <Typography sx={{display:{xs:'none', sm:'flex'}}}>
+                            View
+                        </Typography>
+                    </Button>
+                    <Button variant="outlined" color='error' startIcon={<DeleteIcon />}onClick={()=>{handleDelete(row)}}>
+                        <Typography sx={{display: { xs: "none", md: "flex" },}}>
+                            Delete
+                        </Typography>
+                    </Button>
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+          
+        </CssBaseline>
+    </ThemeProvider>
   )
 }

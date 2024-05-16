@@ -1,67 +1,40 @@
-import './register.css';
-import { useState } from "react";
-import { validateEmail } from "./utils";
-import axios from 'axios';
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { useState } from 'react';
+import { useFormik } from 'formik';
+import axios from 'axios'
+import Avatar from '@mui/material/Avatar';
+import { DatePicker } from '@mui/x-date-pickers';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { MenuItem } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { registerSchema } from './Validator';
 
-const PasswordErrorMessage = () => {
-  return (
-    <p className="FieldError">Password should have at least 8 characters</p>
-  );
-};
-const ContactErrMsg = ()=>{
-  return(
-    <p className='FieldError'>Contact shouldhave 10 digits</p>
-  )
-}
+const defaultTheme = createTheme();
 
 export default function Register() {
-  const [userid, setUserId] = useState("");
-  const [fullname, setFullName] = useState("");
-  const [username, setUsername] = useState("");
-  const [contact, setContact] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("role");
-  const [dateOfJoining, setDateOfJoining] = useState(new Date().toISOString().substr(0, 10));
 
-  const getIsFormValid = () => {
-    return (
-      userid &&
-      fullname &&
-      validateEmail(email) &&
-      password.length >= 8 &&
-      role !== "role" &&
-      username &&
-      contact
-    );
-  };
 
-  const clearForm = () => {
-    setUserId("");
-    setFullName("");
-    setUsername("");
-    setContact("");
-    setEmail("");
-    setPassword("");
-    setRole("role");
-    setDateOfJoining(new Date().toISOString().substr(0, 10));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
+    
     let url = 'http://localhost:5000/api/user/adduser';
 
     axios.post(url, {
-      userid,
-      fullname,
-      username,
-      contact,
-      email,
-      password,
+      fullname : values.fullname,
+      username: values.username,
+      contact : values.contact,
+      email : values.email,
+      password: values.password,
       role,
-      dateOfJoining
+      doj,
     })
     .then(({ data }) => {
       console.log(data);
@@ -70,104 +43,164 @@ export default function Register() {
     })
     .catch(err => {
       console.error(err);
-      alert("Error creating account. Please try again.");
+      alert(`Error creating account. Please try again.`);
     });
   };
 
+  const clearForm = () => {
+    resetForm();
+    setRole("");
+    setDoj(new Date().toISOString().substr(0, 10));
+  };
+
+  const [role, setRole] = useState('');
+  const [doj, setDoj] = useState(new Date().toISOString())
+
+  const {values, handleSubmit, resetForm , touched, errors,getFieldProps} = useFormik({
+      initialValues:{
+        username : "",
+        fullname : "",
+        email : "",
+        password: "",
+        contact : "",
+        },
+        validationSchema : registerSchema,
+        onSubmit
+
+    }
+  )
+
+  
+
   return (
-    <div className="RegistrationApp">
-      <form onSubmit={handleSubmit} className="registrationForm">
-      <Button type="primary" danger ghost icon = {<DeleteOutlined />} onClick={()=>{
-          sessionStorage.clear();
-          window.location.href = '/';
-          
-        }}
-        style={{"marginRight": "500px"}}
+    <ThemeProvider theme={defaultTheme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
         >
-         close
-        </Button>
-        
-        <h2>New User</h2>
-        <div className="formRow">
-          <div className="Field">
-            <label>User ID <sup>*</sup></label>
-            <input
-              value={userid}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="User ID"
-            />
-          </div>
-          <div className="Field">
-            <label>Full name <sup>*</sup></label>
-            <input
-              value={fullname}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Full name"
-            />
-          </div>
-        </div>
-        <div className="formRow">
-          <div className="Field">
-            <label>Username <sup>*</sup></label>
-            <input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-            />
-          </div>
-          <div className="Field">
-            <label>Contact <sup>*</sup></label>
-            <input
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              placeholder="Contact"
-              type="number"
-            />
-            {contact.length > 0 && contact.length !== 10  && < ContactErrMsg />}
-          </div>
-        </div>
-        <div className="formRow">
-          <div className="Field">
-            <label>Email address <sup>*</sup></label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
-            />
-          </div>
-          <div className="Field">
-            <label>Password <sup>*</sup></label>
-            <input
-              value={password}
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            />
-            {password.length > 0 && password.length < 8 && <PasswordErrorMessage />}
-          </div>
-        </div>
-        <div className="formRow">
-          <div className="Field">
-            <label>Role <sup>*</sup></label>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="role">Role</option>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <div className="Field">
-            <label>Date of joining <sup>*</sup></label>
-            <input
-              value={dateOfJoining}
-              type="date"
-              onChange={(e) => setDateOfJoining(e.target.value)}
-            />
-          </div>
-        </div>
-        <button type="submit" disabled={!getIsFormValid()}>
-          Create account
-        </button>
-      </form>
-    </div>
-  );
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Register
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="userName"
+                  required
+                  fullWidth
+                  helperText = {touched.username && errors.username ? errors.username : "Enter UserName" }
+                  color={touched.username && errors.username ? 'error' : "primary" }
+                  id="userName"
+                  label="Username"
+                  autoFocus
+                  {...getFieldProps("username")}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  helperText = {touched.fullname && errors.fullname ? errors.fullname : "Enter Full Name" }
+                  color={touched.fullname && errors.fullname ? 'error' : "primary" }
+                  id="FullName"
+                  label="Full Name"
+                  name="Full Name"
+                  autoComplete="full-name"
+                  {...getFieldProps("fullname")}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  helperText = {touched.email && errors.email ? errors.email : "Enter Email" }
+                  color={touched.email && errors.email ? 'error' : "primary" }
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  {...getFieldProps("email")}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  color={touched.password && errors.password ? 'error' : "primary" }
+                  helperText= {touched.password && errors.password ? errors.password : "Enter Password" }
+                  {...getFieldProps("password")}
+                  autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12} sm = {6}>
+                <TextField
+                  select
+                  value = {role}
+                  onChange={(e)=>{setRole(e.target.value)}}
+                  required
+                  fullWidth
+                  name="role"
+                  label="Role"
+                  id="role"
+                >
+                  <MenuItem value="user">User</MenuItem>
+                  <MenuItem value="admin">Admin</MenuItem>
+                </TextField>
+              </Grid>
+
+              <Grid item xs={12} sm = {6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="contact"
+                  label="Contact"
+                  id="contact"
+                  color={touched.contact && errors.contact? 'error' : "primary" }
+                  helperText= {touched.contact && errors.contact ? errors.contact : "Enter Contact" }
+                  {...getFieldProps("contact")}
+                />
+              </Grid>
+              <Grid item xs={12} sm = {6}>
+                <DatePicker
+                  label = "Date of Join"
+                  
+                />
+              </Grid>
+
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+      </LocalizationProvider>
+    </ThemeProvider>
+    )
 }

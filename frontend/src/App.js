@@ -1,6 +1,6 @@
 import './App.css';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import UserNavbar from './Component/User/UserNavbar';
+import { Route, Routes} from 'react-router-dom';
+import UserNavbar from './Component/User/UserNavBar';
 import UserHome from './Component/User/UserHome';
 import AdminNavbar from './Component/Admin/AdminNavbar';
 import AdminOutgoing from './Component/Admin/AdminOutgoing';
@@ -24,7 +24,6 @@ function getToken() {
 }
 
 function App() {
-  const navigate = useNavigate();
 
   const token = getToken()
 
@@ -36,7 +35,7 @@ function App() {
   return (
         <div className="App">
           <Routes>
-            <Route path='/' element = {<Login/>}/>
+            <Route path='/' element = {<Login setToken={setToken} />}/>
             <Route path='/register'element={<Register/>} />
             <Route path = "/PdfViewer/:filename" element = {<PdfViewer/>} />
             <Route path="/user" element={

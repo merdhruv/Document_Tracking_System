@@ -1,10 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import { SearchOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import React,{useState, useEffect} from 'react'
 import axios from 'axios';
+import { styled } from "@mui/material/styles";
+import SendIcon from '@mui/icons-material/Send';
+import {Typography,Button} from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { useNavigate } from 'react-router-dom';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  
 
 export default function Outgoing() {
-  const [documentList, setDocumentsList] = useState([]);
+    const navigate = useNavigate();
+    const [documentsList, setDocumentsList] = useState([]);
+
+    const handleView = (doc) => {
+        navigate(`/PdfViewer/${doc.filename}`);
+      };
 
   useEffect(()=>{
     axios.get("http://localhost:5000/api/file")
@@ -14,42 +49,38 @@ export default function Outgoing() {
   },[])
 
   return (
-    <div>
-      <div className='table-container'>
-        <table className="table table-bordered caption-top">
-          <caption>List of Documents</caption>
-            <thead className='table-dark'>
-              <tr>
-                <th scope="col">Doc Code</th>
-                <th scope="col">Recipient</th>
-                <th scope="col">Details</th>
-                <th scope="col">Category</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                Object.values(documentList).map((doc)=>{
-                  return<tr key = {doc._id}>
-                    <td>{doc.Doc_code}</td>
-                    <td>{doc.recipient}</td>
-                    <td>{doc.description}</td>
-                    <td>{doc.category}</td>
-                    <td> {doc.status} </td>
-                    <td> <Button type="primary" icon={<SearchOutlined />}>
-                      view
-                      </Button>
-                    </td>
-                    
-                  </tr>
-                })
-
-              }
-            </tbody>
-          </table>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700, mt:3 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell >Doc. Code</StyledTableCell>
+            <StyledTableCell align="right">Recipent</StyledTableCell>
+            <StyledTableCell align="right">File Name</StyledTableCell>
+            <StyledTableCell align="right">Category</StyledTableCell>
+            <StyledTableCell align="right">Action</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {documentsList.map((row) => (
+            <StyledTableRow key={row.Doc_code}>
+              <StyledTableCell component="th" scope="row">
+                {row.Doc_code}
+              </StyledTableCell>
+              <StyledTableCell align="right">{row.recipient}</StyledTableCell>
+              <StyledTableCell align="right">{row.filename}</StyledTableCell>
+              <StyledTableCell align="right">{row.category}</StyledTableCell>
+              <StyledTableCell align="right">
+                    <Button variant="contained" startIcon={<SendIcon />} style={{"marginRight":"10px"}} onClick={()=>{handleView(row)}}>
+                        <Typography sx={{display:{xs:'none', sm:'flex'}}}>
+                            View
+                        </Typography>
+                    </Button>
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
           
-      </div>
-    </div>
   )
 }

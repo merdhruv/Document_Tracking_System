@@ -1,6 +1,6 @@
 // import './register.css';
 import { useState } from "react";
-import { validateEmail } from "../utils";
+// import { validateEmail } from "../utils";
 import axios from 'axios';
 
 const PasswordErrorMessage = () => {
@@ -23,7 +23,7 @@ export default function UpdateUser() {
     return (
       userid &&
       fullname &&
-      validateEmail(email) &&
+      // validateEmail(email) &&
       password.length >= 8 &&
       role !== "role" &&
       username &&

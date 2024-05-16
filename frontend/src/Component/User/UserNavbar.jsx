@@ -1,68 +1,191 @@
-import React, { useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link ,useNavigate} from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
-import { Button, Dropdown } from 'react-bootstrap';
-import "./home.css"
+import React ,{useState}from "react";
+import { Link } from "react-router-dom";
+import {  createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { AppBar, Box } from "@mui/material";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
 
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-  <div className="d-flex align-items-center" ref={ref} onClick={onClick}>
-    <div className="icon-background">
-      <FontAwesomeIcon icon={faCircleUser} />
-    </div>
-  </div>
-));
+const defaultTheme = createTheme();
 
-function UserNavbar({setToken, token}) {
-  const navigate = useNavigate();
+export default function UserNavBar() {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+    window.location.href = '/user';
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const handleOutgoing = ()=>{
+    window.location.href = '/user/outgoing';
+  }
+
   return (
-    <nav className="navbar bg-dark navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/user">
-          Document Tracking System
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarText" style = {{"position" : "relative", "justifyContent":"end"}}>
-          <Dropdown>
-            <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-            </Dropdown.Toggle>
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline>
+        <AppBar position="static">
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Avatar src="https://images-workbench.99static.com/alRM7OHaLHbw-HDzd4AS1YnD8CU=/http://s3.amazonaws.com/projects-files/18/1847/184768/da7b63f4-dac3-557b-2589-4412be10ab47.png" />
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="#app-bar-with-responsive-menu"
+                sx={{
+                  m: 2,
+                  display: { xs: "none", md: "flex" },
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                Document Tracking App
+              </Typography>
 
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="1">
-                <Link className="dropdown-item" to="/user" exact activeClassName="active">
-                  Incoming
-                </Link>
-              </Dropdown.Item>
-              <Dropdown.Item eventKey="2">
-                <Link className="dropdown-item" to="/user/outgoing" activeClassName="active">
-                  Outgoing
-                </Link>
-              </Dropdown.Item>
-              
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="4"><Button className="dropdown-item" onClick={(e)=>{
-                sessionStorage.clear();
-                window.location.href = '/';
-                }} exact activeClassName="active">
-                  Sign Out
-                </Button></Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </div>
-    </nav>
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                    <MenuItem  onClick={handleCloseNavMenu}>
+                      <Link to = '/user'>Incoming</Link>
+                    </MenuItem>
+                    <MenuItem  onClick={handleCloseNavMenu}>
+                      <Link to = '/user/outgoing'>Outgoing</Link>
+                    </MenuItem>
+
+                </Menu>
+              </Box>
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href="#app-bar-with-responsive-menu"
+                sx={{
+                  mr: 2,
+                  display: { xs: "flex", md: "none" },
+                  flexGrow: 1,
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    Incoming
+                  </Button>
+                  <Button
+                    onClick={handleOutgoing}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    Outgoing
+                  </Button>
+
+              </Box>
+
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                    <MenuItem >
+                      <Link className="dropdown-item" to="/user" >
+                        DashBoard
+                      </Link>
+                    </MenuItem>
+                    <MenuItem  >
+                      <Link className="dropdown-item" to="/user/outgoing" >
+                        Profile
+                      </Link>
+                    </MenuItem>
+                    <MenuItem  onClick={()=>{
+                      sessionStorage.clear();
+                      window.location.href = '/';
+                    }}>
+                      <Button>
+                        Logout
+                      </Button>
+                    </MenuItem>
+                  
+                </Menu>
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </CssBaseline>
+    </ThemeProvider>
   );
 }
-
-export default UserNavbar;
